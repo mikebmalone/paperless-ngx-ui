@@ -1,0 +1,96 @@
+# Enable rewrite engine
+RewriteEngine On
+
+# Redirect to HTTPS if not already using it
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Security headers
+<IfModule mod_headers.c>
+    # HSTS (Strict Transport Security)
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    
+    # Content Security Policy - adjust as needed for your resources
+    Header always set Content-Security-Policy "default-src 'self'; connect-src 'self' https://remote.hopeagedcare.com.au:8000; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:;"
+    
+    # Prevent MIME type sniffing
+    Header always set X-Content-Type-Options "nosniff"
+    
+    # XSS Protection
+    Header always set X-XSS-Protection "1; mode=block"
+    
+    # Referrer Policy
+    Header always set Referrer-Policy "same-origin"
+    
+    # Frame Options
+    Header always set X-Frame-Options "SAMEORIGIN"
+    
+    # Cache control for static assets
+    <FilesMatch "\.(ico|pdf|jpg|jpeg|png|gif|js|css|svg|woff|woff2|ttf|eot)$">
+        Header set Cache-Control "max-age=2592000, public"
+    </FilesMatch>
+    
+    # No cache for HTML files
+    <FilesMatch "\.(html|htm)$">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+        Header set Pragma "no-cache"
+        Header set Expires "0"
+    </FilesMatch>
+</IfModule>
+
+# CORS Headers for API requests
+<IfModule mod_headers.c>
+    <FilesMatch "^$">
+        # Handle CORS for API/account endpoints
+        SetEnvIf Origin "^(.*)$" ORIGIN=$1
+        Header always set Access-Control-Allow-Origin "%{ORIGIN}e" env=ORIGIN
+        Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+        Header always set Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept, Authorization, X-CSRFToken"
+        Header always set Access-Control-Allow-Credentials "true"
+        Header always set Access-Control-Max-Age "3600"
+        
+        # Handle OPTIONS requests for CORS preflight
+        RewriteCond %{REQUEST_METHOD} OPTIONS
+        RewriteRule ^(.*)$ $1 [R=200,L]
+    </FilesMatch>
+</IfModule>
+
+# Proxy rules for API and accounts
+# API endpoints
+RewriteCond %{REQUEST_URI} ^/api/(.*)$
+RewriteRule ^api/(.*)$ https://remote.hopeagedcare.com.au:8000/api/$1 [P,L]
+
+# Accounts endpoints
+RewriteCond %{REQUEST_URI} ^/accounts/(.*)$
+RewriteRule ^accounts/(.*)$ https://remote.hopeagedcare.com.au:8000/accounts/$1 [P,L]
+
+# Preserve proxy headers
+<IfModule mod_headers.c>
+    # Set headers for proxied requests
+    RequestHeader set X-Forwarded-Proto "https"
+    RequestHeader set X-Forwarded-Port "443"
+    RequestHeader set X-Real-IP %{REMOTE_ADDR}e
+    
+    # Preserve Host header
+    ProxyPreserveHost On
+</IfModule>
+
+# Cookie handling for CSRF
+<IfModule mod_headers.c>
+    # Adjust cookies from backend (modify domain and secure flag)
+    Header edit* Set-Cookie "(?i)^(.*)(domain=[^;]*)(.*)" "$1$3"
+    Header edit* Set-Cookie "(?i)^(.*)(path=/)(.*)" "$1path=/$3"
+    Header edit* Set-Cookie "(?i)^([^;]*(?:(?!secure).)*)" "$1; Secure"
+    Header edit* Set-Cookie "(?i)^([^;]*(?:(?!httponly).)*)" "$1; HttpOnly"
+    Header edit* Set-Cookie "(?i)^([^;]*(?:(?!samesite).)*)" "$1; SameSite=Lax"
+</IfModule>
+
+# Angular HTML5 routing (must come last)
+# Don't rewrite files or directories
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# If the requested resource doesn't exist, serve index.html
+RewriteRule ^ index.html [L]
+

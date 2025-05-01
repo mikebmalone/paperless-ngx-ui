@@ -1,0 +1,84 @@
+{
+  "/api/documents": {
+    "target": "http://remote.hopeagedcare.com.au:8000",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "withCredentials": true,
+    "headers": {
+      "Origin": "http://remote.hopeagedcare.com.au:8000",
+      "Accept": "application/json",
+      "X-Requested-With": "XMLHttpRequest",
+      "Content-Type": "application/json"
+    },
+    "cookieDomainRewrite": {
+      "*": "localhost"
+    },
+    "cookiePathRewrite": {
+      "*": "/"
+    }
+  },
+  "/api": {
+    "target": "http://remote.hopeagedcare.com.au:8000",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "withCredentials": true,
+    "headers": {
+      "Origin": "http://remote.hopeagedcare.com.au:8000",
+      "Accept": "application/json"
+    },
+    "cookieDomainRewrite": {
+      "*": "localhost"
+    }
+  },
+  "/accounts/login": {
+    "target": "http://remote.hopeagedcare.com.au:8000",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "withCredentials": true,
+    "headers": {
+      "Origin": "http://remote.hopeagedcare.com.au:8000",
+      "X-Requested-With": "XMLHttpRequest",
+      "Accept": "text/html,application/xhtml+xml,application/xml",
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    "cookieDomainRewrite": {
+      "*": "localhost"
+    },
+    "cookiePathRewrite": {
+      "*": "/"
+    }
+  },
+  "/accounts": {
+    "target": "http://remote.hopeagedcare.com.au:8000",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "withCredentials": true,
+    "headers": {
+      "Origin": "http://remote.hopeagedcare.com.au:8000"
+    },
+    "cookieDomainRewrite": "localhost"
+  },
+  "/static": {
+    "target": "http://remote.hopeagedcare.com.au:8000",
+    "secure": false,
+    "changeOrigin": true,
+    "headers": {
+      "Origin": "http://remote.hopeagedcare.com.au:8000"
+    }
+  },
+  "/dashboard": {
+    "target": "http://remote.hopeagedcare.com.au:8000",
+    "secure": false,
+    "changeOrigin": true,
+    "withCredentials": true,
+    "headers": {
+      "Origin": "http://remote.hopeagedcare.com.au:8000"
+    },
+    "cookieDomainRewrite": "localhost"
+  }
+}
+

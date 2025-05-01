@@ -1,0 +1,75 @@
+<div class="container">
+  <!-- Loading spinner -->
+  <div *ngIf="isLoading" class="spinner-container">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+
+  <!-- Error message -->
+  <div *ngIf="errorMessage" class="error-container">
+    <p class="error-message">{{ errorMessage }}</p>
+    <button mat-raised-button color="primary" (click)="goBack()">Back to Documents</button>
+  </div>
+
+  <!-- Document details -->
+  <mat-card *ngIf="document && !isLoading" class="document-card">
+    <mat-card-header>
+      <mat-card-title>{{ document.title }}</mat-card-title>
+      <mat-card-subtitle>
+        ID: {{ document.id }} | Type: {{ document.file_type }}
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-divider></mat-divider>
+      
+      <div class="document-details">
+        <h3>Document Information</h3>
+        
+        <mat-list>
+          <mat-list-item>
+            <span class="detail-label">Created:</span> 
+            <span class="detail-value">{{ document.created_date | date:'medium' }}</span>
+          </mat-list-item>
+          
+          <mat-list-item>
+            <span class="detail-label">Last Modified:</span> 
+            <span class="detail-value">{{ document.modified | date:'medium' }}</span>
+          </mat-list-item>
+          
+          <mat-list-item>
+            <span class="detail-label">Added to Library:</span> 
+            <span class="detail-value">{{ document.added | date:'medium' }}</span>
+          </mat-list-item>
+          
+          <mat-list-item *ngIf="document.original_file_name">
+            <span class="detail-label">Original Filename:</span> 
+            <span class="detail-value">{{ document.original_file_name }}</span>
+          </mat-list-item>
+          
+          <mat-list-item *ngIf="document.archive_serial_number">
+            <span class="detail-label">Archive Serial Number:</span> 
+            <span class="detail-value">{{ document.archive_serial_number }}</span>
+          </mat-list-item>
+        </mat-list>
+        
+        <h3 *ngIf="document.content">Content</h3>
+        <div *ngIf="document.content" class="document-content">
+          {{ document.content }}
+        </div>
+      </div>
+    </mat-card-content>
+    
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon> Back
+      </button>
+      <a mat-raised-button color="accent" [href]="getPreviewUrl()" target="_blank">
+        <mat-icon>visibility</mat-icon> Preview
+      </a>
+      <a mat-raised-button color="warn" [href]="getDownloadUrl()">
+        <mat-icon>download</mat-icon> Download
+      </a>
+    </mat-card-actions>
+  </mat-card>
+</div>
+

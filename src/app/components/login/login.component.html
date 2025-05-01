@@ -1,0 +1,49 @@
+<div class="login-container">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>Paperless-ngx Login</mat-card-title>
+      <mat-card-subtitle>Please sign in to access documents</mat-card-subtitle>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <!-- Error message -->
+        <div *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+        
+        <!-- Username field -->
+        <mat-form-field class="form-field">
+          <mat-label>Username</mat-label>
+          <input matInput formControlName="username" type="text" required>
+          <mat-error *ngIf="loginForm.get('username')?.hasError('required')">
+            Username is required
+          </mat-error>
+        </mat-form-field>
+        
+        <!-- Password field -->
+        <mat-form-field class="form-field">
+          <mat-label>Password</mat-label>
+          <input matInput formControlName="password" type="password" required>
+          <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+            Password is required
+          </mat-error>
+        </mat-form-field>
+        
+        <!-- Submit button -->
+        <div class="button-container">
+          <button 
+            mat-raised-button 
+            color="primary" 
+            type="submit" 
+            [disabled]="loginForm.invalid || isLoading"
+          >
+            <span *ngIf="!isLoading">Login</span>
+            <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+

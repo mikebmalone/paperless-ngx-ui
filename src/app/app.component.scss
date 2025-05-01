@@ -1,0 +1,40 @@
+.header {
+  padding: 1rem;
+  background-color: white;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.logo-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.logo {
+  height: 50px;
+  width: auto;
+}
+
+.content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.layout-container {
+  display: flex;
+  gap: 24px;
+  
+  > :last-child {
+    flex: 1;
+    min-width: 0; // Prevent flex child from overflowing
+  }
+}
+
+.sidebar {
+  flex: 0 0 300px;
+}
+
+.main-content {
+  width: 100%;
+}
