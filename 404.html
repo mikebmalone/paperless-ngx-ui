@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Page Not Found</title>
+  <base href="/paperless-ngx-ui/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    // Store the URL path in sessionStorage
+    sessionStorage.setItem('redirectPath', window.location.pathname.replace('/paperless-ngx-ui', ''));
+    // Redirect to the index.html
+    window.location.href = '/paperless-ngx-ui/';
+  </script>
+</head>
+<body>
+  <p>Redirecting...</p>
+</body>
+</html>
+
